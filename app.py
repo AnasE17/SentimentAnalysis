@@ -1,9 +1,17 @@
 from flask import Flask, request, render_template
 import json
+import pickle
 
 app = Flask(__name__)
 
+def preprocess(txt):
+	#faire preprocess
+	return txt
+
+def predict(txt):
+	
 def submit_txt(txt):
+	preprocess(txt)
 	status = "success"
 	return status
 	
