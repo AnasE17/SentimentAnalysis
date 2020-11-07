@@ -1,18 +1,38 @@
 from flask import Flask, request, render_template
 import json
 import pickle
+import nltk
+import string
+import re
+#from nltk.classify import NaiveBayesClassifier
+
 
 app = Flask(__name__)
 
-def preprocess(txt):
-	#faire preprocess
-	return txt
+def preprocess(sentence):
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    def build_bow_features(words):
+        return {word:True for word in words}
 
-def predict(txt):
-	
+    sentence = sentence.lower()
+    sentence = sentence.replace('\n','')
+    useless = nltk.corpus.stopwords.words("english") + list(string.punctuation)
+    wordlist = [word for word in nltk.word_tokenize(sentence) if word not in useless]
+    stemmed_words = [nltk.stem.SnowballStemmer('english').stem(word) for word in wordlist]
+    Bow = (build_bow_features(stemmed_words))
+    print(Bow)
+    return Bow
+
+
+def predict (txt):
+	model = pickle.load(open('SentimentAnalysisModel.pkl', 'rb'))
+	prediction = model.classify(txt)
+	return prediction
+
 def submit_txt(txt):
-	preprocess(txt)
-	status = "success"
+	txt = preprocess(txt)
+	status = predict(txt)
 	return status
 	
 @app.route('/', methods=['GET', 'POST'])
