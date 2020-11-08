@@ -26,14 +26,18 @@ def preprocess(sentence):
 
 
 def predict (txt):
-	model = pickle.load(open('SentimentAnalysisModel.pkl', 'rb'))
+	model = pickle.load(open('SentimentAnalysisModel2.pkl', 'rb'))
 	prediction = model.classify(txt)
 	return prediction
 
 def submit_txt(txt):
 	txt = preprocess(txt)
 	status = predict(txt)
-	return status
+	if status==4 :
+		return 'Positive'
+	if status==0 :
+		return 'Negative'
+	return 'FAIL'
 	
 @app.route('/', methods=['GET', 'POST'])
 def index():
