@@ -9,6 +9,7 @@ import re
 
 app = Flask(__name__)
 
+#preprocess the text
 def preprocess(sentence):
     nltk.download('stopwords')
     nltk.download('punkt')
@@ -24,12 +25,13 @@ def preprocess(sentence):
     print(Bow)
     return Bow
 
-
+#load the trained model and do prediction
 def predict (txt):
-	model = pickle.load(open('SentimentAnalysisModel2.pkl', 'rb'))
+	
 	prediction = model.classify(txt)
 	return prediction
 
+#return the prediction 
 def submit_txt(txt):
 	txt = preprocess(txt)
 	status = predict(txt)
@@ -48,6 +50,7 @@ def index():
 	return render_template('interface.html')
 
 if __name__ == '__main__':
+	model = pickle.load(open('SentimentAnalysisModel2.pkl', 'rb'))
 	app.run(host='0.0.0.0')
 	
 	
